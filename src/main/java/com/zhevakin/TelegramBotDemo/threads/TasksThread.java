@@ -38,7 +38,11 @@ public class TasksThread {
     public void sendMessage() {
 
         for (Tasks tasks : currentTasksList) {
-            bot.sendMessage(tasks.getUsers().getId(), tasks.getText());
+            if (tasks.isDone()) continue;
+            if (bot.sendMessage(tasks.getUsers().getId(), tasks.getText()))  {
+                tasks.setDone(true);
+                tasksDao.update(tasks,true);
+            }
         }
     }
 

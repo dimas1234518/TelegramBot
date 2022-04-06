@@ -25,4 +25,12 @@ public class TasksDao {
         return task;
     }
 
+    public Tasks update(Tasks tasks, boolean done) {
+        Query query = entityManager.createQuery("update Tasks Set done = :done WHERE id = :id");
+        query.setParameter("id", tasks.getId());
+        query.setParameter("done", done);
+        query.executeUpdate();
+        return tasks;
+    }
+
 }

@@ -53,15 +53,17 @@ public class WriteReadBot extends SpringWebhookBot {
         return null;
     }
 
-    public void sendMessage(Long chatId, String text) {
+    public boolean sendMessage(Long chatId, String text) {
         SendMessage message = new SendMessage();
         message.setText(text);
         message.setChatId(chatId.toString());
         try {
             execute(message);
+            return true;
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
 }
