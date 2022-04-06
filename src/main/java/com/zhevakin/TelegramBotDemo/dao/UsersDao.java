@@ -1,6 +1,5 @@
 package com.zhevakin.TelegramBotDemo.dao;
 
-import com.zhevakin.TelegramBotDemo.model.Logs;
 import com.zhevakin.TelegramBotDemo.model.Users;
 import org.springframework.stereotype.Repository;
 

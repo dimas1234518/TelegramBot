@@ -2,7 +2,6 @@ package com.zhevakin.TelegramBotDemo.threads;
 
 import com.zhevakin.TelegramBotDemo.dao.UsersDao;
 import com.zhevakin.TelegramBotDemo.model.Users;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class UsersThread{
 

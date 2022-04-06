@@ -11,7 +11,6 @@ import com.zhevakin.TelegramBotDemo.model.Tasks;
 import com.zhevakin.TelegramBotDemo.model.Users;
 import com.zhevakin.TelegramBotDemo.telegram.TelegramApiClient;
 import com.zhevakin.TelegramBotDemo.threads.LogsThread;
-import com.zhevakin.TelegramBotDemo.threads.TasksThread;
 import com.zhevakin.TelegramBotDemo.threads.UsersThread;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
