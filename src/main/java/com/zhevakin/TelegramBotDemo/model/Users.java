@@ -37,4 +37,7 @@ public class Users {
     @OneToMany(mappedBy = "users", fetch = FetchType.LAZY)
     private Set<Logs> logs;
 
+    @OneToMany(mappedBy = "users", fetch = FetchType.LAZY)
+    private Set<Tasks> tasks;
+
 }

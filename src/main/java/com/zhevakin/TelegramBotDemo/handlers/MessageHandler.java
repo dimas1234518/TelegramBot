@@ -5,6 +5,7 @@ import com.zhevakin.TelegramBotDemo.dao.ModulesDao;
 import com.zhevakin.TelegramBotDemo.dao.UsersDao;
 import com.zhevakin.TelegramBotDemo.enums.BotMessageEnum;
 import com.zhevakin.TelegramBotDemo.model.Logs;
+import com.zhevakin.TelegramBotDemo.model.Modules;
 import com.zhevakin.TelegramBotDemo.model.Users;
 import com.zhevakin.TelegramBotDemo.telegram.TelegramApiClient;
 import com.zhevakin.TelegramBotDemo.threads.LogsThread;
@@ -15,6 +16,8 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.User;
+
+import java.util.List;
 
 @Component
 public class MessageHandler {
@@ -35,10 +38,7 @@ public class MessageHandler {
 
     public BotApiMethod<?> answerMessage(Message message) {
         String chatId = message.getChatId().toString();
-
         Users users = getUser(message);
-        Logs logs = getLogs(message,users);
-
 
         if (message.hasDocument()) {
             //return addUserDictionary(chatId, message.getDocument().getFileId());
@@ -63,7 +63,12 @@ public class MessageHandler {
     }
 
     private SendMessage getModulesMessage(String chatId, Users users) {
-        return new SendMessage(chatId, modulesDao.getUsersModules(users).toString());
+        StringBuilder stringBuilder = new StringBuilder();
+        List<Modules> modulesList = modulesDao.getAll();
+        for (int i = 0; i < modulesList.size(); i++) {
+            stringBuilder.append(i+1).append(" ").append(modulesList.get(i).toString()).append("\n");
+        }
+        return new SendMessage(chatId, stringBuilder.toString());
     }
 
     private Users getUser(Message message) {
@@ -75,17 +80,17 @@ public class MessageHandler {
         users.setUserName(userTelegram.getUserName());
         UsersThread usersThread = new UsersThread(users,usersDao);
         usersThread.run();
+        getLogs(message,users);
 
         return users;
     }
 
-    private Logs getLogs(Message message, Users users) {
+    private void getLogs(Message message, Users users) {
         Logs logs = new Logs();
         logs.setAction(message.getText());
         logs.setUsers(users);
         LogsThread logsThread = new LogsThread(logs,logsDao);
         logsThread.run();
-        return logs;
     }
 
     private SendMessage getTask(String chatId) {
