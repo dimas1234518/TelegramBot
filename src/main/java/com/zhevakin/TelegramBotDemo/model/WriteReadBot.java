@@ -10,6 +10,7 @@ import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.starter.SpringWebhookBot;
 
 import java.io.IOException;
@@ -50,6 +51,17 @@ public class WriteReadBot extends SpringWebhookBot {
                 return messageHandler.answerMessage(update.getMessage());
         }
         return null;
+    }
+
+    public void sendMessage(Long chatId, String text) {
+        SendMessage message = new SendMessage();
+        message.setText(text);
+        message.setChatId(chatId.toString());
+        try {
+            execute(message);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
     }
 
 }

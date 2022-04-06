@@ -22,7 +22,7 @@ public class Tasks {
     Long id;
 
     @Column(name = "done")
-    boolean done;
+    boolean done = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id", nullable = false)

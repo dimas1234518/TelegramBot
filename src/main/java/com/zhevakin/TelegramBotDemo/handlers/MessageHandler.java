@@ -2,13 +2,16 @@ package com.zhevakin.TelegramBotDemo.handlers;
 
 import com.zhevakin.TelegramBotDemo.dao.LogsDao;
 import com.zhevakin.TelegramBotDemo.dao.ModulesDao;
+import com.zhevakin.TelegramBotDemo.dao.TasksDao;
 import com.zhevakin.TelegramBotDemo.dao.UsersDao;
 import com.zhevakin.TelegramBotDemo.enums.BotMessageEnum;
 import com.zhevakin.TelegramBotDemo.model.Logs;
 import com.zhevakin.TelegramBotDemo.model.Modules;
+import com.zhevakin.TelegramBotDemo.model.Tasks;
 import com.zhevakin.TelegramBotDemo.model.Users;
 import com.zhevakin.TelegramBotDemo.telegram.TelegramApiClient;
 import com.zhevakin.TelegramBotDemo.threads.LogsThread;
+import com.zhevakin.TelegramBotDemo.threads.TasksThread;
 import com.zhevakin.TelegramBotDemo.threads.UsersThread;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,6 +20,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.User;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -28,6 +33,8 @@ public class MessageHandler {
     LogsDao logsDao;
     @Autowired
     ModulesDao modulesDao;
+    @Autowired
+    TasksDao tasksDao;
 
 
     public MessageHandler(UsersDao usersDao, LogsDao logsDao, ModulesDao modulesDao) {
@@ -52,10 +59,24 @@ public class MessageHandler {
             return getStartMessage(chatId);
         } else if (inputText.equals("/modules")) {
             return getModulesMessage(chatId, users);
+        } else if (inputText.equals("/tasks")) {
+            return getTasksMessage(chatId, users);
         }
         else {
             return new SendMessage(chatId, BotMessageEnum.NON_COMMAND_MESSAGE.getMessage());
         }
+    }
+
+    private BotApiMethod<?> getTasksMessage(String chatId, Users users) {
+        Tasks tasks = new Tasks();
+        tasks.setText("Test text");
+        tasks.setTopic("Test topic");
+        tasks.setUsers(users);
+        Date currentDate = new Date();
+        currentDate.setTime(currentDate.getTime() + 60 * 2);
+        tasks.setDateDone(currentDate);
+        tasksDao.create(tasks);
+        return new SendMessage(chatId, "Сообщение придет в: " + currentDate.toString());
     }
 
     private SendMessage getStartMessage(String chatId) {
