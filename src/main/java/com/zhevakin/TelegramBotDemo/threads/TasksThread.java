@@ -35,7 +35,7 @@ public class TasksThread {
 
     @Scheduled(fixedRate = 5 * 1000)
     public void sendMessage() {
-
+        if (currentTasksList == null) return;
         for (Tasks tasks : currentTasksList) {
             if (tasks.isDone()) continue;
             if (bot.sendMessage(tasks.getUsers().getId(), tasks.getText()))  {

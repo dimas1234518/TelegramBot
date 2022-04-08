@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -29,5 +30,14 @@ public class UsersDao {
         entityManager.persist(users);
         return users;
     }
+
+    public Users updateCity(Users users, String city) {
+        Query query = entityManager.createQuery("update Users Set city = :city WHERE id = :id");
+        query.setParameter("id", users.getId());
+        query.setParameter("city", city);
+        query.executeUpdate();
+        return users;
+    }
+
 
 }

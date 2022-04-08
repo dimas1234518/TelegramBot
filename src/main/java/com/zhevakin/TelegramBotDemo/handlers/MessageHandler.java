@@ -9,6 +9,7 @@ import com.zhevakin.TelegramBotDemo.model.Logs;
 import com.zhevakin.TelegramBotDemo.model.Modules;
 import com.zhevakin.TelegramBotDemo.model.Tasks;
 import com.zhevakin.TelegramBotDemo.model.Users;
+import com.zhevakin.TelegramBotDemo.modules.weather.template.WeatherRestTemplate;
 import com.zhevakin.TelegramBotDemo.telegram.TelegramApiClient;
 import com.zhevakin.TelegramBotDemo.threads.LogsThread;
 import com.zhevakin.TelegramBotDemo.threads.UsersThread;
@@ -60,10 +61,27 @@ public class MessageHandler {
             return getModulesMessage(chatId, users);
         } else if (inputText.equals("/tasks")) {
             return getTasksMessage(chatId, users);
+        } else if (inputText.equals("/weather")) {
+            return getWeathersModules(chatId);
+        } else if (inputText.contains("/city")) {
+            return setCityUsers(chatId,users, inputText);
         }
         else {
             return new SendMessage(chatId, BotMessageEnum.NON_COMMAND_MESSAGE.getMessage());
         }
+    }
+
+    private BotApiMethod<?> setCityUsers(String chatId, Users users, String inputText) {
+        String city = inputText.replace("/city ","");
+        usersDao.updateCity(users,city);
+        return new SendMessage(chatId, BotMessageEnum.CITY_SUCCESSFUL.getMessage() + " " + city);
+    }
+
+    private BotApiMethod<?> getWeathersModules(String chatId) {
+        Users user = usersDao.getById(Long.parseLong(chatId));
+        WeatherRestTemplate weatherRestTemplate = new WeatherRestTemplate();
+        if (user.getCity() == null) return new SendMessage(chatId, BotMessageEnum.CITY_NOT_FOUND.getMessage());
+        return new SendMessage(chatId, weatherRestTemplate.getInfo(user.getCity()));
     }
 
     private BotApiMethod<?> getTasksMessage(String chatId, Users users) {

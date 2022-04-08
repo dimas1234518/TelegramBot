@@ -8,6 +8,8 @@ public enum BotMessageEnum {
     CHOOSE_DICTIONARY_MESSAGE("Выберите словарь\uD83D\uDC47 "),
     UPLOAD_DICTIONARY_MESSAGE("Добавьте файл, соответствующий шаблону. Вы можете сделать это в любой момент"),
     NON_COMMAND_MESSAGE("Пожалуйста, воспользуйтесь командой /start\uD83D\uDC47"),
+    CITY_NOT_FOUND("Пожалуйста, установите город у себя в профиле, используя команду /city Название города"),
+    CITY_SUCCESSFUL("Город успешно установлен"),
 
     //результаты загрузки словаря
     SUCCESS_UPLOAD_MESSAGE("\uD83D\uDC4D Словарь успешно загружен"),

@@ -1,7 +1,6 @@
 package com.zhevakin.TelegramBotDemo.config;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Value;

@@ -40,4 +40,7 @@ public class Users {
     @OneToMany(mappedBy = "users", fetch = FetchType.LAZY)
     private Set<Tasks> tasks;
 
+    @Column(name = "city")
+    private String city;
+
 }
