@@ -71,7 +71,8 @@ public class WeatherRestTemplate {
             if (temp_min > main.getTemp()) temp_min = (int) main.getTemp();
             if (temp_max < main.getTemp()) temp_max = (int) main.getTemp();
             String outTime = stringFormat.format(dateFormat.parse(forecast.getDt_txt().split(" ")[1]));
-            output.append(outTime).append(" ").append((int)main.getTemp()).append(" градусов\n");
+            output.append(outTime).append(" ").append((int)main.getTemp()).append(" градусов. Ожидаемая погода: ")
+            .append(forecast.getWeather().get(0).getDescription()).append("\n");
             if (index == 5) break;
         }
         return "минимум: " + temp_min + " максимум: " + temp_max + " градусов\n" + output;
