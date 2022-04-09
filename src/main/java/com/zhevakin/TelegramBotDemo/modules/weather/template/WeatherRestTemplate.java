@@ -4,12 +4,15 @@ import com.zhevakin.TelegramBotDemo.modules.weather.model.forecast.Forecast;
 import com.zhevakin.TelegramBotDemo.modules.weather.model.forecast.ForecastWeather;
 import com.zhevakin.TelegramBotDemo.modules.weather.model.standard.CurrentWeather;
 import com.zhevakin.TelegramBotDemo.modules.weather.model.standard.Main;
+import lombok.SneakyThrows;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 // TODO: https://api.openweathermap.org/data/2.5/forecast?q=Ростов-на-Дону&appid=d5f0f5bc324feb3869e04e63fa86f113&units=metric&lang=RU для прогноза
@@ -52,12 +55,14 @@ public class WeatherRestTemplate {
         return "Нет информации о погоде";
     }
 
-    // TODO: предусмотреть возможность вывода даты с и по
+    @SneakyThrows
     private String getDailyWeather(ForecastWeather forecastWeather) {
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        SimpleDateFormat stringFormat = new SimpleDateFormat("HH:mm");
         int temp_min = Integer.MAX_VALUE;
         int temp_max = Integer.MIN_VALUE;
-
+        StringBuilder output = new StringBuilder();
         List<Forecast> forecastList = forecastWeather.getList();
         int index = 0;
         for (Forecast forecast : forecastList) {
@@ -65,9 +70,11 @@ public class WeatherRestTemplate {
             Main main = forecast.getMain();
             if (temp_min > main.getTemp()) temp_min = (int) main.getTemp();
             if (temp_max < main.getTemp()) temp_max = (int) main.getTemp();
+            String outTime = stringFormat.format(dateFormat.parse(forecast.getDt_txt().split(" ")[1]));
+            output.append(outTime).append(" ").append((int)main.getTemp()).append(" градусов\n");
             if (index == 5) break;
         }
-        return "минимум: " + temp_min + " максимум: " + temp_max + " градусов";
+        return "минимум: " + temp_min + " максимум: " + temp_max + " градусов\n" + output;
 
     }
 

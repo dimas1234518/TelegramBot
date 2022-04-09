@@ -1,6 +1,5 @@
 package com.zhevakin.TelegramBotDemo.dao;
 
-import com.zhevakin.TelegramBotDemo.model.Users;
 import com.zhevakin.TelegramBotDemo.model.WeatherModule;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Repository;
@@ -10,7 +9,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
