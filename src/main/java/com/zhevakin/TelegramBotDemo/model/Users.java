@@ -12,7 +12,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "Users")
-public class Users {
+public class Users{
 
     public Users() {
     }
@@ -39,6 +39,9 @@ public class Users {
 
     @OneToMany(mappedBy = "users", fetch = FetchType.LAZY)
     private Set<Tasks> tasks;
+
+    @OneToOne(mappedBy = "users", fetch = FetchType.LAZY)
+    private WeatherModule weatherModule;
 
     @Column(name = "city")
     private String city;

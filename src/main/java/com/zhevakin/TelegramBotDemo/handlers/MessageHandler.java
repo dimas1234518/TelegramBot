@@ -1,14 +1,8 @@
 package com.zhevakin.TelegramBotDemo.handlers;
 
-import com.zhevakin.TelegramBotDemo.dao.LogsDao;
-import com.zhevakin.TelegramBotDemo.dao.ModulesDao;
-import com.zhevakin.TelegramBotDemo.dao.TasksDao;
-import com.zhevakin.TelegramBotDemo.dao.UsersDao;
+import com.zhevakin.TelegramBotDemo.dao.*;
 import com.zhevakin.TelegramBotDemo.enums.BotMessageEnum;
-import com.zhevakin.TelegramBotDemo.model.Logs;
-import com.zhevakin.TelegramBotDemo.model.Modules;
-import com.zhevakin.TelegramBotDemo.model.Tasks;
-import com.zhevakin.TelegramBotDemo.model.Users;
+import com.zhevakin.TelegramBotDemo.model.*;
 import com.zhevakin.TelegramBotDemo.modules.weather.template.WeatherRestTemplate;
 import com.zhevakin.TelegramBotDemo.telegram.TelegramApiClient;
 import com.zhevakin.TelegramBotDemo.threads.LogsThread;
@@ -20,6 +14,9 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.User;
 
+import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
@@ -35,6 +32,8 @@ public class MessageHandler {
     ModulesDao modulesDao;
     @Autowired
     TasksDao tasksDao;
+    @Autowired
+    WeatherDao weatherDao;
 
 
     public MessageHandler(UsersDao usersDao, LogsDao logsDao, ModulesDao modulesDao) {
@@ -67,9 +66,31 @@ public class MessageHandler {
             return setCityUsers(chatId,users, inputText);
         } else if (inputText.contains("/forecast")) {
             return getForecast(chatId);
-        }
+        } else if (inputText.contains("/weather settings"))
+            return setWeatherSettings(chatId, inputText);
         else {
             return new SendMessage(chatId, BotMessageEnum.NON_COMMAND_MESSAGE.getMessage());
+        }
+    }
+
+    private BotApiMethod<?> setWeatherSettings(String chatId, String inputText) {
+        boolean everyday = false;
+        Users users = usersDao.getById(Long.parseLong(chatId));
+        String[] settings = inputText.replace("/weather settings ","").split(";");
+        if (settings[0].toLowerCase().equals("да")) everyday = true;
+        SimpleDateFormat format = new SimpleDateFormat("hh.mm.ss");
+        Date time = null;
+        try {
+            time = format.parse(settings[1]);
+            WeatherModule weatherModule = new WeatherModule();
+            weatherModule.setEveryday(everyday);
+            weatherModule.setUsers(users);
+            weatherModule.setTime(time);
+            weatherDao.create(weatherModule);
+            return new SendMessage(chatId, BotMessageEnum.SUCCESS_SETTINGS.getMessage());
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return new SendMessage(chatId, BotMessageEnum.INVALID_FORMAT_TIME.getMessage());
         }
     }
 

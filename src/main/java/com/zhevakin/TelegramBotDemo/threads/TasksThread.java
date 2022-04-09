@@ -26,7 +26,7 @@ public class TasksThread {
         this.bot = bot;
         tasksList = tasksDao.getAll();
     }
-    // 60 * 60 * 60 - один час
+    // 60 * 60 * 1000 - один час
     @Scheduled(fixedRate = 30 * 1000)
     public void synchronizedTasks() {
         tasksList = tasksDao.getAll();

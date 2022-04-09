@@ -17,7 +17,7 @@ import java.util.List;
 @Component
 public class WeatherRestTemplate {
 
-    // TODO: change Hardcode
+    // TODO: изменить Hardcode на аннотацию
     //@Value("${weather.appid}")
     String appid = "d5f0f5bc324feb3869e04e63fa86f113";
     String units = "metric";
@@ -32,7 +32,7 @@ public class WeatherRestTemplate {
 
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
             CurrentWeather currentWeather = responseEntity.getBody();
-            //TODO: округлить вывод данных до целых
+            //TODO: округлить вывод данных до целых по правилам математики
             return "Погода в городе " + currentWeather.getName() + " на текущий момент времени равна" +
                     " " + currentWeather.getMain().getTemp();
         }
@@ -52,6 +52,7 @@ public class WeatherRestTemplate {
         return "Нет информации о погоде";
     }
 
+    // TODO: предусмотреть возможность вывода даты с и по
     private String getDailyWeather(ForecastWeather forecastWeather) {
 
         int temp_min = Integer.MAX_VALUE;

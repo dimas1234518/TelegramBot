@@ -10,7 +10,8 @@ public enum BotMessageEnum {
     NON_COMMAND_MESSAGE("Пожалуйста, воспользуйтесь командой /start\uD83D\uDC47"),
     CITY_NOT_FOUND("Пожалуйста, установите город у себя в профиле, используя команду /city Название города"),
     CITY_SUCCESSFUL("Город успешно установлен"),
-
+    SUCCESS_SETTINGS("Настройки успешно применены"),
+    INVALID_FORMAT_TIME("Неправильный формат времени. Укажите время через точки, пример 09.00.00"),
     //результаты загрузки словаря
     SUCCESS_UPLOAD_MESSAGE("\uD83D\uDC4D Словарь успешно загружен"),
     EXCEPTION_TELEGRAM_API_MESSAGE("Ошибка при попытку получить файл из API Telegram"),
