@@ -114,6 +114,7 @@ public class MessageHandler {
         return new SendMessage(chatId, weatherRestTemplate.getInfo(users.getCity()));
     }
 
+    // TODO: сделать правильную настройку оповещений
     private BotApiMethod<?> getTasksMessage(String chatId, Users users) {
         Tasks tasks = new Tasks();
         tasks.setText("Test text");
