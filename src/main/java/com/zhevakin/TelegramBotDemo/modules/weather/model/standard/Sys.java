@@ -1,4 +1,4 @@
-package com.zhevakin.TelegramBotDemo.modules.weather.model;
+package com.zhevakin.TelegramBotDemo.modules.weather.model.standard;
 
 import lombok.Getter;
 import lombok.Setter;

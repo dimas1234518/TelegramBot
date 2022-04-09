@@ -65,10 +65,19 @@ public class MessageHandler {
             return getWeathersModules(chatId);
         } else if (inputText.contains("/city")) {
             return setCityUsers(chatId,users, inputText);
+        } else if (inputText.contains("/forecast")) {
+            return getForecast(chatId);
         }
         else {
             return new SendMessage(chatId, BotMessageEnum.NON_COMMAND_MESSAGE.getMessage());
         }
+    }
+
+    private BotApiMethod<?> getForecast(String chatId) {
+        Users users = usersDao.getById(Long.parseLong(chatId));
+        WeatherRestTemplate weatherRestTemplate = new WeatherRestTemplate();
+        if (users.getCity() == null) return new SendMessage(chatId, BotMessageEnum.CITY_NOT_FOUND.getMessage());
+        return new SendMessage(chatId, weatherRestTemplate.getForecast(users.getCity()));
     }
 
     private BotApiMethod<?> setCityUsers(String chatId, Users users, String inputText) {
@@ -78,10 +87,10 @@ public class MessageHandler {
     }
 
     private BotApiMethod<?> getWeathersModules(String chatId) {
-        Users user = usersDao.getById(Long.parseLong(chatId));
+        Users users = usersDao.getById(Long.parseLong(chatId));
         WeatherRestTemplate weatherRestTemplate = new WeatherRestTemplate();
-        if (user.getCity() == null) return new SendMessage(chatId, BotMessageEnum.CITY_NOT_FOUND.getMessage());
-        return new SendMessage(chatId, weatherRestTemplate.getInfo(user.getCity()));
+        if (users.getCity() == null) return new SendMessage(chatId, BotMessageEnum.CITY_NOT_FOUND.getMessage());
+        return new SendMessage(chatId, weatherRestTemplate.getInfo(users.getCity()));
     }
 
     private BotApiMethod<?> getTasksMessage(String chatId, Users users) {
