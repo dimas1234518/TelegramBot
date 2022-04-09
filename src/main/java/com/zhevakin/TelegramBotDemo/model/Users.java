@@ -40,7 +40,7 @@ public class Users{
     @OneToMany(mappedBy = "users", fetch = FetchType.LAZY)
     private Set<Tasks> tasks;
 
-    @OneToOne(mappedBy = "users", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "users")
     private WeatherModule weatherModule;
 
     @Column(name = "city")

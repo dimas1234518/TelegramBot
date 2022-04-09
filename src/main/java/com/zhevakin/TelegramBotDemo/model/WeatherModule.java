@@ -22,7 +22,7 @@ public class WeatherModule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long Id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name="user_id", nullable = false)
     private Users users;
     

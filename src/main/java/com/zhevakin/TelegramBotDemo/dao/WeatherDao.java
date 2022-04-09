@@ -24,7 +24,7 @@ public class WeatherDao {
     public WeatherModule getById(long id) { return entityManager.find(WeatherModule.class, id); }
 
     public WeatherModule getByIdUsers(long id) {
-        Query query = entityManager.createQuery("FROM WeatherModule WHERE user_id = :user", WeatherModule.class);
+        Query query = entityManager.createQuery("FROM WeatherModule WHERE user_id = :user");
         query.setParameter("user",id);
         return (WeatherModule) query.getSingleResult();
     }
@@ -36,10 +36,14 @@ public class WeatherDao {
     }
 
 
-    public void update(WeatherModule weatherModule, boolean b) {
+    public void update(WeatherModule weatherModule) {
+        Query query = entityManager.createQuery("update WeatherModule set done = true WHERE id = :id");
+        query.setParameter("id",weatherModule.getId());
+        query.executeUpdate();
     }
 
     //TODO: подумать как лучше оптимизировать преобразование в начало и конец часа
+    //TODO: подумать насчет временных зон
     @SneakyThrows
     public List<WeatherModule> getAll() {
         Query query = entityManager.createQuery( "FROM WeatherModule WHERE done = false AND time >= :begin AND time <= :end",
@@ -67,5 +71,13 @@ public class WeatherDao {
         inputDate[1] = "00";
         inputDate[2] = "00";
         return inputDate[0] + ":" + inputDate[1] + ":" + inputDate[2];
+    }
+
+    public void update(List<WeatherModule> sendingList) {
+        for (WeatherModule weatherModule : sendingList) {
+            Query query = entityManager.createQuery("update WeatherModule set done = false WHERE id = :id");
+            query.setParameter("id", weatherModule.getId());
+            query.executeUpdate();
+        }
     }
 }

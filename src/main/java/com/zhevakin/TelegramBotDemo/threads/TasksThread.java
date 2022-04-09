@@ -32,7 +32,9 @@ public class TasksThread {
         tasksList = tasksDao.getAll();
         currentTasksList = tasksList;
     }
-
+    /* TODO: реализовать, чтобы во время по минутно срабатывал. Т.е. если взяли за целый час, то уведомления будут отправляться
+            в 19.01, 19.02, 19.03 и т.д.
+         */
     @Scheduled(fixedRate = 5 * 1000)
     public void sendMessage() {
         if (currentTasksList == null) return;
