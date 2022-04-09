@@ -127,6 +127,7 @@ public class MessageHandler {
     }
 
     private SendMessage getStartMessage(String chatId) {
+        weatherDao.getAll();
         return new SendMessage(chatId, BotMessageEnum.HELP_MESSAGE.getMessage());
     }
 
