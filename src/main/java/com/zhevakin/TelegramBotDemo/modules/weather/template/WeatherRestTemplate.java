@@ -5,13 +5,11 @@ import com.zhevakin.TelegramBotDemo.modules.weather.model.forecast.ForecastWeath
 import com.zhevakin.TelegramBotDemo.modules.weather.model.standard.CurrentWeather;
 import com.zhevakin.TelegramBotDemo.modules.weather.model.standard.Main;
 import lombok.SneakyThrows;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -20,6 +18,7 @@ import java.util.List;
 @Component
 public class WeatherRestTemplate {
 
+    // TODO: сделать вывод погоды в конкретный час
     // TODO: изменить Hardcode на аннотацию
     //@Value("${weather.appid}")
     String appid = "d5f0f5bc324feb3869e04e63fa86f113";
@@ -37,7 +36,7 @@ public class WeatherRestTemplate {
             CurrentWeather currentWeather = responseEntity.getBody();
             //TODO: округлить вывод данных до целых по правилам математики
             return "Погода в городе " + currentWeather.getName() + " на текущий момент времени равна" +
-                    " " + currentWeather.getMain().getTemp();
+                    " " + (int) currentWeather.getMain().getTemp();
         }
         return "Нет информации о погоде";
     }
@@ -50,7 +49,7 @@ public class WeatherRestTemplate {
         ResponseEntity<ForecastWeather> responseEntity = restTemplate.getForEntity(stringBuilder, ForecastWeather.class);
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
             ForecastWeather forecastWeather = responseEntity.getBody();
-            return "Погода в городе " + city + " на ближайшие 12 часов " + getDailyWeather(forecastWeather);
+            return getInfo(city) + "\nПогода в городе " + city + " на ближайшие 12 часов " + getDailyWeather(forecastWeather);
         }
         return "Нет информации о погоде";
     }
