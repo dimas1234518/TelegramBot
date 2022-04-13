@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class weatherThread {
+public class WeatherThread {
 
     private List<WeatherModule> currentList;
     private List<WeatherModule> weatherModulesList;
@@ -28,7 +28,7 @@ public class weatherThread {
     @Autowired
     WeatherRestTemplate weatherRestTemplate;
 
-    public weatherThread(WeatherDao weatherDao, WriteReadBot bot, WeatherRestTemplate weatherRestTemplate) {
+    public WeatherThread(WeatherDao weatherDao, WriteReadBot bot, WeatherRestTemplate weatherRestTemplate) {
         this.weatherDao = weatherDao;
         this.bot = bot;
         this.weatherRestTemplate = weatherRestTemplate;
