@@ -1,7 +1,6 @@
 package com.zhevakin.TelegramBotDemo.threads;
 
 import com.zhevakin.TelegramBotDemo.dao.WeatherDao;
-import com.zhevakin.TelegramBotDemo.model.Tasks;
 import com.zhevakin.TelegramBotDemo.model.WeatherModule;
 import com.zhevakin.TelegramBotDemo.model.WriteReadBot;
 import com.zhevakin.TelegramBotDemo.modules.weather.template.WeatherRestTemplate;
