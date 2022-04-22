@@ -28,7 +28,7 @@ public class Tasks {
     @JoinColumn(name="user_id", nullable = false)
     Users users;
 
-    @Column(name = "dateDone")
+    @Column(name = "date_done")
     Date dateDone;
 
     @Column(name = "text")

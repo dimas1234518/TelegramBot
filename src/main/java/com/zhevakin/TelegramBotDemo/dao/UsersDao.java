@@ -20,6 +20,7 @@ public class UsersDao {
         return entityManager.createQuery("from Users u", Users.class).getResultList();
     }
 
+
     public Users getById(long id) {
         return entityManager.find(Users.class, id);
     }

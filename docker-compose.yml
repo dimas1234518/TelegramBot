@@ -4,14 +4,18 @@ services:
     image: postgres:13.4
     ports:
     - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: 341146406
+      POSTGRES_USER: postgres
+      POSTGRES_DB: telegramBot_db
     restart: always
   app:
     image: telegram-bot-demo
     build:
-      context: src
+      context: .
       dockerfile: dockerfile
     depends_on:
       - postgres
     ports:
-      - 8086:8086
+      - 8080:8080
     restart: always

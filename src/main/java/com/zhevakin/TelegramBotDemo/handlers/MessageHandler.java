@@ -58,19 +58,27 @@ public class MessageHandler {
             return getStartMessage(chatId);
         } else if (inputText.equals("/modules")) {
             return getModulesMessage(chatId, users);
-        } else if (inputText.equals("/tasks")) {
-            return getTasksMessage(chatId, users);
+        } else if (inputText.contains("/tasks")) {
+            return getTasksMessage(chatId, users, inputText);
         } else if (inputText.equals("/weather")) {
             return getWeathersModules(chatId);
         } else if (inputText.contains("/city")) {
             return setCityUsers(chatId,users, inputText);
         } else if (inputText.contains("/forecast")) {
             return getForecast(chatId);
-        } else if (inputText.contains("/weather settings"))
+        } else if (inputText.contains("/weather settings")) {
             return setWeatherSettings(chatId, inputText);
-        else {
+        } else if (inputText.contains("/time")) {
+            return setTimeReminder(chatId, inputText);
+        } else {
             return new SendMessage(chatId, BotMessageEnum.NON_COMMAND_MESSAGE.getMessage());
         }
+    }
+
+    private BotApiMethod<?> setTimeReminder(String chatId, String inputText) {
+        String[] inputMessage = inputText.split(" ");
+        if (inputMessage.length == 1) return new SendMessage(chatId, "Пожалуйста, укажите время");
+        return new SendMessage(chatId, "Сообщения будут приходить в ");
     }
 
     private BotApiMethod<?> setWeatherSettings(String chatId, String inputText) {
@@ -115,16 +123,29 @@ public class MessageHandler {
     }
 
     // TODO: сделать правильную настройку оповещений
-    private BotApiMethod<?> getTasksMessage(String chatId, Users users) {
+    private BotApiMethod<?> getTasksMessage(String chatId, Users users, String inputText) {
+
+        String[] inputMessage = inputText.split(";");
         Tasks tasks = new Tasks();
-        tasks.setText("Test text");
-        tasks.setTopic("Test topic");
-        tasks.setUsers(users);
-        Date currentDate = new Date();
-        currentDate.setTime(currentDate.getTime() + 60 * 2);
-        tasks.setDateDone(currentDate);
-        tasksDao.create(tasks);
-        return new SendMessage(chatId, "Сообщение придет в: " + currentDate.toString());
+        Date curTime = new Date();
+        if (inputMessage.length == 1) return new SendMessage(chatId,BotMessageEnum.INFO_TASKS.getMessage());
+        else if (inputMessage.length == 3 ){
+                tasks.setDateDone(addMinuteToDate(Integer.parseInt(inputMessage[1]), curTime));
+                tasks.setText(inputMessage[2]);
+            } else  {
+                tasks.setDateDone(addMinuteToDate(10,curTime));
+                tasks.setText(inputMessage[1]);
+            }
+            tasks.setTopic("Test topic");
+            tasks.setUsers(users);
+            tasksDao.create(tasks);
+            return new SendMessage(chatId, "Сообщение придет в: " + tasks.getDateDone().toString());
+        }
+
+    private Date addMinuteToDate(int minutes, Date beforeTime) {
+        final long ONE_MINUTE_IN_MILLIS = 60000;//millisecs
+        long curTimeIns = beforeTime.getTime();
+        return new Date(curTimeIns + (minutes * ONE_MINUTE_IN_MILLIS));
     }
 
     private SendMessage getStartMessage(String chatId) {
