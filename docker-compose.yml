@@ -6,7 +6,10 @@ services:
     - 5432:5432
     restart: always
   app:
-    image: telegramBotDemo
+    image: telegram-bot-demo
+    build:
+      context: src
+      dockerfile: dockerfile
     depends_on:
       - postgres
     ports:
